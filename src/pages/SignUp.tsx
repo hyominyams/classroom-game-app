@@ -64,54 +64,124 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">회원가입</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSignUp} className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
-            <label>이메일</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-2 border rounded" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+      <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 hover:scale-105">
+        <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">회원가입</h2>
+        {error && <p className="text-red-500 text-center mb-4 text-sm">{error}</p>}
+        <form onSubmit={handleSignUp}>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="email">
+              이메일
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              placeholder="이메일을 입력하세요"
+            />
           </div>
-          <div className="col-span-2">
-            <label>아이디</label>
-            <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required className="w-full p-2 border rounded" />
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="userId">
+              아이디
+            </label>
+            <input
+              id="userId"
+              type="text"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              placeholder="아이디를 입력하세요"
+            />
           </div>
-          <div className="col-span-2">
-            <label>비밀번호</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full p-2 border rounded" />
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="password">
+              비밀번호
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              placeholder="비밀번호를 입력하세요"
+            />
           </div>
-          <div className="col-span-2">
-            <label>이름</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full p-2 border rounded" />
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="name">
+              이름
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              placeholder="이름을 입력하세요"
+            />
           </div>
-          <div>
-            <label>학교</label>
-            <select value={school} onChange={(e) => setSchool(e.target.value)} className="w-full p-2 border rounded">
-              <option>완도초등학교</option>
-              <option>완도SW교육체험센터</option>
-            </select>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="school">
+                학교
+              </label>
+              <select
+                id="school"
+                value={school}
+                onChange={(e) => setSchool(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              >
+                <option>완도초등학교</option>
+                <option>완도SW교육체험센터</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="grade">
+                학년
+              </label>
+              <select
+                id="grade"
+                value={grade}
+                onChange={(e) => setGrade(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              >
+                {[...Array(6)].map((_, i) => (
+                  <option key={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-gray-700 text-sm font-semibold mb-2" htmlFor="classNum">
+                반
+              </label>
+              <select
+                id="classNum"
+                value={classNum}
+                onChange={(e) => setClassNum(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-transparent transition duration-200"
+              >
+                {[...Array(20)].map((_, i) => (
+                  <option key={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+            </div>
           </div>
-          <div>
-            <label>학년</label>
-            <select value={grade} onChange={(e) => setGrade(e.target.value)} className="w-full p-2 border rounded">
-              {[...Array(6)].map((_, i) => <option key={i + 1}>{i + 1}</option>)}
-            </select>
-          </div>
-          <div>
-            <label>반</label>
-            <select value={classNum} onChange={(e) => setClassNum(e.target.value)} className="w-full p-2 border rounded">
-              {[...Array(20)].map((_, i) => <option key={i + 1}>{i + 1}</option>)}
-            </select>
-          </div>
-          <div className="col-span-2 mt-4">
-            <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+          <div className="flex items-center justify-center">
+            <button
+              type="submit"
+              className="w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1"
+            >
               가입하기
             </button>
           </div>
         </form>
-        <div className="text-center mt-4">
-          <Link to="/" className="text-sm text-gray-600 hover:text-gray-800">
+        <div className="text-center mt-6 text-sm">
+          <Link to="/" className="text-blue-500 hover:text-blue-700 font-medium">
             이미 계정이 있으신가요? 로그인
           </Link>
         </div>
