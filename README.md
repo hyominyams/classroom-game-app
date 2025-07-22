@@ -1,42 +1,101 @@
-# 학급 웹앱 페이지 사용 가이드 (README)
+# 📚 **학급 웹앱 페이지** – 사용 가이드
 
-이 웹앱은 초등학교 학급을 위한 맞춤형 웹 서비스입니다. 학생들이 게임을 통해 랭킹을 확인하고, 채팅 기능을 통해 친구들과 소통하며, 교사는 학생들의 학습 참여도를 관리할 수 있습니다.
+이 프로젝트는 초등학교 학급을 위한 **게임·소통·학습 관리** 웹 애플리케이션입니다.  
+학생들은 재미있는 게임으로 랭킹을 겨루고, 실시간 채팅으로 교류하며, 교사는 대시보드에서 학습 참여도를 파악할 수 있습니다.
 
-## 📌 주요 기능 개요
+---
 
-- 로그인 및 회원가입 기능 (아이디 기반 로그인, Firebase 사용)
-- 학급별 게임 랭킹 시스템 (메달 및 테두리 강조)
-- 게임 선택 및 실행 기능 (개발 단계에서는 가상 게임을 임의로 만들어 게임 점수와 랭킹 점수가 상호작용하는지 확인)
-- 실시간 학급 채팅 및 감정 표현 기능
-- 비속어 필터링 및 경고 시스템
-- 교사용 대시보드 (학생 접속 및 점수 확인)
-- 학교별 종합 랭킹 시스템 제공
+## ✨ 핵심 기능
 
-## 🧰 기술 스택
+- **로그인·회원가입** – 아이디 기반 로그인 (Firebase Email Auth 커스터마이징)
+- **게임 게시판**
+  - 학급별 랭킹 1 ~ 10위 표시 (메달 & 테두리 효과)
+  - 게임 선택 & 임베드 실행
+- **실시간 학급 채팅**
+  - 감정 표현(좋음/슬픔/웃김/하트/좋아요)
+  - 욕설 필터 + 경고 3회 시 1일 정지
+- **교사 대시보드**
+  - 학생 접속·점수·경고 현황 그래프
+- **학교별 종합 랭킹**
+- **아바타 커스터마이저** ★신규
+- **Lottie 애니메이션 효과** ★신규
+- **다크·고대비 모드** (접근성)
 
-- 프론트엔드: React (컴포넌트 기반 구조)
-- 백엔드 및 인증: Firebase (Auth, Firestore, Storage)
-- 디자인: 하늘색 파스텔톤 테마, PNG 이미지 삽입 지원
+---
 
-## 🔐 보안 및 인증
+## 🛠️ 기술 스택
 
-- Firebase 이메일 기반 인증 사용
-- 사용자는 아이디로 로그인, 내부적으로 이메일 매핑
-- 비속어 감지 시 경고 누적, 3회 시 계정 1일 정지
+| Layer | Tech |
+|-------|------|
+| 프론트엔드 | **React 18**, Vite, TypeScript, Tailwind CSS, shadcn/ui |
+| 백엔드 | **Firebase** (Auth · Firestore · Storage · Cloud Functions) |
+| 애니메이션 | **Lottie** (`lottie-react`) |
+| 아바타 | **react‑nice‑avatar** |
+| 차트 | Recharts |
+| 테스트 | Cypress |
+| 배포 | Firebase Hosting 또는 Netlify |
 
-## 🖥️ 설치 및 실행 방법
+---
 
-1. Node.js 설치 후 프로젝트 클론
-2. Firebase 프로젝트 설정 및 API 키 발급
-3. `.env` 파일에 Firebase 설정 추가
-4. 아래 명령어로 실행
+## 🚀 로컬 실행
 
 ```bash
+git clone https://github.com/your-repo/class-game-app.git
+cd class-game-app
 npm install
-npm start
+cp .env.example .env      # Firebase 키 입력
+npm run dev               # Vite 개발 서버
 ```
 
-## ⚠️ 주의사항
-- Firebase 보안 규칙 반드시 설정할 것
-- 사용자 개인정보 보호 및 저장소 접근 권한 주의
-- 실시간 DB 사용 시 요금 정책 유의
+### `.env` 예시
+
+```env
+VITE_FIREBASE_API_KEY=xxx
+VITE_FIREBASE_AUTH_DOMAIN=xxx
+VITE_FIREBASE_PROJECT_ID=xxx
+VITE_FIREBASE_STORAGE_BUCKET=xxx
+VITE_FIREBASE_MESSAGING_SENDER_ID=xxx
+VITE_FIREBASE_APP_ID=xxx
+```
+
+---
+
+## 📂 주요 폴더 구조
+
+```
+src/
+ ├─ components/
+ │   ├─ avatars/
+ │   ├─ lottie/
+ │   └─ charts/
+ ├─ pages/
+ │   ├─ LoginPage.tsx
+ │   ├─ SignupPage.tsx
+ │   ├─ GameBoardPage.tsx
+ │   ├─ ChatRoomPage.tsx
+ │   ├─ TeacherDashboardPage.tsx
+ │   └─ SchoolRankingPage.tsx
+ ├─ hooks/
+ ├─ lib/ (firebase.ts)
+ └─ styles/
+```
+
+---
+
+## ⚠️ 주의 사항
+
+- **보안**: Firebase 보안 규칙을 배포 전에 꼭 설정하세요.
+- **요금**: Firestore 실시간 리스너 사용량을 모니터링하세요.
+- **개인정보**: 학년/반/이름 등 민감정보는 최소한으로 저장하고, COPPA 체크리스트를 준수하세요.
+
+---
+
+## 🤝 기여 방법
+
+1. Issue 또는 Discussion에 개선 사항 제안
+2. `feat/` 브랜치에서 작업 후 PR
+3. CI → Cypress → Review 후 병합
+
+---
+
+Happy Coding 🎉
