@@ -51,7 +51,7 @@ const SignUp: React.FC = () => {
       // 회원가입 성공 후 로그인 페이지로 이동
       navigate('/');
 
-    } catch (err: any) {
+    } catch (err: { code?: string }) {
       if (err.code === 'auth/email-already-in-use') {
         setError('이미 사용중인 이메일입니다.');
       } else if (err.code === 'auth/weak-password') {
