@@ -51,14 +51,17 @@ const SignUp: React.FC = () => {
       // 회원가입 성공 후 로그인 페이지로 이동
       navigate('/');
 
-    } catch (err: { code?: string }) {
-      if (err.code === 'auth/email-already-in-use') {
-        setError('이미 사용중인 이메일입니다.');
-      } else if (err.code === 'auth/weak-password') {
-        setError('비밀번호는 6자리 이상이어야 합니다.');
-      } else {
-        setError('회원가입에 실패했습니다. 다시 시도해주세요.');
+    } catch (err: unknown) {
+      let errorMessage = '회원가입에 실패했습니다. 다시 시도해주세요.';
+      if (typeof err === 'object' && err !== null && 'code' in err) {
+        const firebaseError = err as { code: string };
+        if (firebaseError.code === 'auth/email-already-in-use') {
+          errorMessage = '이미 사용중인 이메일입니다.';
+        } else if (firebaseError.code === 'auth/weak-password') {
+          errorMessage = '비밀번호는 6자리 이상이어야 합니다.';
+        }
       }
+      setError(errorMessage);
       console.error(err);
     }
   };
