@@ -1,1 +1,1 @@
-Fix: PostCSS configuration for Tailwind CSS
+Feat: Configure Tailwind CSS v4 for Vite

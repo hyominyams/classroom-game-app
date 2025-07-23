@@ -84,7 +84,7 @@ const Login: React.FC = () => {
           <div className="flex items-center justify-center">
             <button
               type="submit"
-              className="w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1"
+              className="w-full bg-blue-400 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:-translate-y-1 relative z-10"
             >
               로그인
             </button>

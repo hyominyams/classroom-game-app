@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { setDoc, doc, collection, query, where, getDocs } from 'firebase/firestore';
+import { setDoc, doc, collection, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
 
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -42,10 +42,9 @@ const SignUp: React.FC = () => {
         school,
         grade: parseInt(grade),
         class: parseInt(classNum),
-        score: 0,
-        warnings: 0,
-        role: 'student',
-        isSuspendedUntil: null,
+        avatarConfig: {},
+        warnCount: 0,
+        createdAt: serverTimestamp(),
       });
 
       // 회원가입 성공 후 로그인 페이지로 이동
@@ -108,7 +107,7 @@ const SignUp: React.FC = () => {
             </select>
           </div>
           <div className="col-span-2 mt-4">
-            <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+            <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded relative z-10">
               가입하기
             </button>
           </div>
