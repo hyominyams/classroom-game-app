@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, query, where, getDocs } from 'firebase/firestore';
-import placeholder from '../assets/placeholder.png';
+
 
 const Login: React.FC = () => {
   const [userId, setUserId] = useState('');
@@ -50,7 +50,7 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 p-4">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md transform transition-all duration-300 hover:scale-105">
         <div className="flex justify-center mb-8">
-          <img src={placeholder} alt="Logo Placeholder" className="w-36 h-36 object-contain" />
+          <img src="/logo.png" alt="Logo" className="w-36 h-36 object-contain" />
         </div>
         <h2 className="text-3xl font-extrabold text-center text-gray-800 mb-8">로그인</h2>
         {error && <p className="text-red-500 text-center mb-4 text-sm">{error}</p>}
