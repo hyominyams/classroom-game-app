@@ -10,13 +10,13 @@ import { getDatabase } from "firebase/database";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyA-ZM4aBxo_mrZ27R7aSXWiIjhBXqmNkRU", // Firebase 콘솔에서 복사한 값을 여기에 붙여넣으세요.
-  authDomain: "class-website-b429c.firebaseapp.com",
-  projectId: "class-website-b429c",
-  storageBucket: "class-website-b429c.firebasestorage.app",
-  messagingSenderId: "857207798965",
-  appId: "1:857207798965:web:2b6885a56155a4b45412fc",
-  measurementId: "G-4KH3MFXZ3J" // 선택 사항
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, // 선택 사항
 };
 
 // Initialize Firebase
