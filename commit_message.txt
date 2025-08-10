@@ -1,1 +1,1 @@
-fix: Add npm ci step to Firebase Hosting GitHub Actions workflow
+feat: Remove Firebase Hosting configuration
