@@ -1,1 +1,1 @@
-feat: Implement code splitting for page components
+fix: Add npm ci step to Firebase Hosting GitHub Actions workflow
