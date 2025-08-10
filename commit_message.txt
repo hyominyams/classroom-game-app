@@ -1,1 +1,1 @@
-Feat: Configure Tailwind CSS v4 for Vite
+fix: Add path alias configuration
