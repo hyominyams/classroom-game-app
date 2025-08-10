@@ -4,10 +4,31 @@ import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { setDoc, doc, collection, query, where, getDocs, serverTimestamp } from 'firebase/firestore';
 
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [grade, setGrade] = useState('1');
   const [classNum, setClassNum] = useState('1');
@@ -18,6 +39,11 @@ const SignUp: React.FC = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    if (password !== confirmPassword) {
+      setError('비밀번호가 일치하지 않습니다.');
+      return;
+    }
 
     try {
       // 아이디 중복 확인
@@ -66,58 +92,86 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-center mb-6">회원가입</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSignUp} className="grid grid-cols-2 gap-4">
-          <div className="col-span-2">
-            <label>이메일</label>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full p-2 border rounded" />
-          </div>
-          <div className="col-span-2">
-            <label>아이디</label>
-            <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required className="w-full p-2 border rounded" />
-          </div>
-          <div className="col-span-2">
-            <label>비밀번호</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required className="w-full p-2 border rounded" />
-          </div>
-          <div className="col-span-2">
-            <label>이름</label>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full p-2 border rounded" />
-          </div>
-          <div>
-            <label>학교</label>
-            <select value={school} onChange={(e) => setSchool(e.target.value)} className="w-full p-2 border rounded">
-              <option>완도초등학교</option>
-              <option>완도SW교육체험센터</option>
-            </select>
-          </div>
-          <div>
-            <label>학년</label>
-            <select value={grade} onChange={(e) => setGrade(e.target.value)} className="w-full p-2 border rounded">
-              {[...Array(6)].map((_, i) => <option key={i + 1}>{i + 1}</option>)}
-            </select>
-          </div>
-          <div>
-            <label>반</label>
-            <select value={classNum} onChange={(e) => setClassNum(e.target.value)} className="w-full p-2 border rounded">
-              {[...Array(20)].map((_, i) => <option key={i + 1}>{i + 1}</option>)}
-            </select>
-          </div>
-          <div className="col-span-2 mt-4">
-            <button type="submit" className="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded relative z-10">
-              가입하기
-            </button>
-          </div>
-        </form>
-        <div className="text-center mt-4">
-          <Link to="/" className="text-sm text-gray-600 hover:text-gray-800">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+      <Card className="w-full max-w-lg">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-bold">회원가입</CardTitle>
+          <CardDescription>새로운 계정을 생성합니다.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <form onSubmit={handleSignUp} className="grid grid-cols-2 gap-4">
+            <div className="col-span-2">
+              <Label htmlFor="email">이메일</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            </div>
+            <div className="col-span-2">
+              <Label htmlFor="userId">아이디</Label>
+              <Input id="userId" type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
+            </div>
+            <div className="col-span-2">
+              <Label htmlFor="password">비밀번호</Label>
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            <div className="col-span-2">
+              <Label htmlFor="confirmPassword">비밀번호 확인</Label>
+              <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+            </div>
+            <div className="col-span-2">
+              <Label htmlFor="name">이름</Label>
+              <Input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div>
+              <Label>학교</Label>
+              <Select value={school} onValueChange={setSchool}>
+                <SelectTrigger>
+                  <SelectValue placeholder="학교를 선택하세요" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="완도초등학교">완도초등학교</SelectItem>
+                  <SelectItem value="완도SW교육체험센터">완도SW교육체험센터</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>학년</Label>
+              <Select value={grade} onValueChange={setGrade}>
+                <SelectTrigger>
+                  <SelectValue placeholder="학년" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[...Array(6)].map((_, i) => <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>반</Label>
+              <Select value={classNum} onValueChange={setClassNum}>
+                <SelectTrigger>
+                  <SelectValue placeholder="반" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[...Array(20)].map((_, i) => <SelectItem key={i + 1} value={String(i + 1)}>{i + 1}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="col-span-2 mt-4">
+              <Button type="submit" className="w-full">
+                가입하기
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+        <CardFooter className="text-center block">
+          <Link to="/" className="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
             이미 계정이 있으신가요? 로그인
           </Link>
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
