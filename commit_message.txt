@@ -1,1 +1,0 @@
-feat: Remove Firebase Hosting configuration

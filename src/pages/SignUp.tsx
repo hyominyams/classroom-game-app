@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const SignUp: React.FC = () => {
+const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
@@ -92,43 +92,53 @@ const SignUp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <Card className="w-full max-w-lg">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">회원가입</CardTitle>
-          <CardDescription>새로운 계정을 생성합니다.</CardDescription>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-blue-200 p-4">
+      <Card className="w-full max-w-lg rounded-2xl shadow-xl border border-slate-200 bg-white">
+        <CardHeader className="text-center p-8">
+          <CardTitle className="text-3xl font-bold text-slate-700">회원가입</CardTitle>
+          <CardDescription className="text-slate-500 mb-6">새로운 계정을 생성합니다.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-8 pt-0">
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <form onSubmit={handleSignUp} className="grid grid-cols-2 gap-4">
+          <form onSubmit={handleSignUp} className="grid grid-cols-2 gap-6">
             <div className="col-span-2">
-              <Label htmlFor="email">이메일</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+              <Label htmlFor="email" className="text-slate-700">이메일</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
+              />
             </div>
             <div className="col-span-2">
-              <Label htmlFor="userId">아이디</Label>
-              <Input id="userId" type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
+              <Label htmlFor="userId" className="text-slate-700">아이디</Label>
+              <Input id="userId" type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
+              />
             </div>
             <div className="col-span-2">
-              <Label htmlFor="password">비밀번호</Label>
-              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+              <Label htmlFor="password" className="text-slate-700">비밀번호</Label>
+              <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
+              />
             </div>
             <div className="col-span-2">
-              <Label htmlFor="confirmPassword">비밀번호 확인</Label>
-              <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+              <Label htmlFor="confirmPassword" className="text-slate-700">비밀번호 확인</Label>
+              <Input id="confirmPassword" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
+              />
             </div>
             <div className="col-span-2">
-              <Label htmlFor="name">이름</Label>
-              <Input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+              <Label htmlFor="name" className="text-slate-700">이름</Label>
+              <Input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
+              />
             </div>
             <div>
-              <Label>학교</Label>
+              <Label className="text-slate-700">학교</Label>
               <Select value={school} onValueChange={setSchool}>
-                <SelectTrigger>
+                <SelectTrigger className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300">
                   <SelectValue placeholder="학교를 선택하세요" />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,9 +148,9 @@ const SignUp: React.FC = () => {
               </Select>
             </div>
             <div>
-              <Label>학년</Label>
+              <Label className="text-slate-700">학년</Label>
               <Select value={grade} onValueChange={setGrade}>
-                <SelectTrigger>
+                <SelectTrigger className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300">
                   <SelectValue placeholder="학년" />
                 </SelectTrigger>
                 <SelectContent>
@@ -149,9 +159,9 @@ const SignUp: React.FC = () => {
               </Select>
             </div>
             <div>
-              <Label>반</Label>
+              <Label className="text-slate-700">반</Label>
               <Select value={classNum} onValueChange={setClassNum}>
-                <SelectTrigger>
+                <SelectTrigger className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300">
                   <SelectValue placeholder="반" />
                 </SelectTrigger>
                 <SelectContent>
@@ -160,15 +170,18 @@ const SignUp: React.FC = () => {
               </Select>
             </div>
             <div className="col-span-2 mt-4">
-              <Button type="submit" className="w-full">
+              <Button 
+                type="submit" 
+                className="w-full bg-blue-400 text-white font-semibold py-3 rounded-lg hover:bg-blue-500 transform hover:scale-105 transition-transform"
+              >
                 가입하기
               </Button>
             </div>
           </form>
         </CardContent>
-        <CardFooter className="text-center block">
-          <Link to="/" className="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
-            이미 계정이 있으신가요? 로그인
+        <CardFooter className="text-center block p-8 pt-0">
+          <Link to="/" className="text-sm text-slate-600 hover:underline">
+            이미 계정이 있으신가요? <span className="text-blue-500 font-semibold">로그인</span>
           </Link>
         </CardFooter>
       </Card>
@@ -176,4 +189,4 @@ const SignUp: React.FC = () => {
   );
 };
 
-export default SignUp;
+export default SignUpPage;

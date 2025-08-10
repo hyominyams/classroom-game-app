@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const Login: React.FC = () => {
+const LoginPage: React.FC = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -59,22 +59,22 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-blue-200 p-4">
+      <Card className="w-full max-w-md rounded-2xl shadow-xl border border-slate-200 bg-white">
+        <CardHeader className="text-center p-8">
           <img src="/logo.png" alt="Logo" className="w-24 h-24 mx-auto mb-4 object-contain" />
-          <CardTitle className="text-2xl font-bold">로그인</CardTitle>
-          <CardDescription>계정에 로그인합니다.</CardDescription>
+          <CardTitle className="text-3xl font-bold text-slate-700">로그인</CardTitle>
+          <CardDescription className="text-slate-500 mb-6">다시 만나서 반가워요!</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-8 pt-0">
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <Label htmlFor="userId">아이디</Label>
+              <Label htmlFor="userId" className="text-slate-700">아이디</Label>
               <Input 
                 id="userId" 
                 type="text" 
@@ -82,10 +82,11 @@ const Login: React.FC = () => {
                 onChange={(e) => setUserId(e.target.value)} 
                 placeholder="아이디를 입력하세요"
                 required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
               />
             </div>
             <div>
-              <Label htmlFor="password">비밀번호</Label>
+              <Label htmlFor="password" className="text-slate-700">비밀번호</Label>
               <Input 
                 id="password" 
                 type="password" 
@@ -93,22 +94,25 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)} 
                 placeholder="비밀번호를 입력하세요"
                 required 
+                className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
               />
             </div>
-            <Button type="submit" className="w-full">
+            <Button 
+              type="submit" 
+              className="w-full bg-blue-400 text-white font-semibold py-3 rounded-lg hover:bg-blue-500 transform hover:scale-105 transition-transform"
+            >
               로그인
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="text-center block">
-          <Link to="/signup" className="text-sm text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
-            아직 계정이 없으신가요? 회원가입
+        <CardFooter className="text-center block p-8 pt-0">
+          <Link to="/signup" className="text-sm text-slate-600 hover:underline">
+            아직 계정이 없으신가요? <span className="text-blue-500 font-semibold">회원가입</span>
           </Link>
-          {/* TODO: 아이디/비밀번호 찾기 페이지 링크 추가 */}
         </CardFooter>
       </Card>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;
