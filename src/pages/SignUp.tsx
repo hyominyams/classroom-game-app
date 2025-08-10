@@ -18,6 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { Listbox } from '@headlessui/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -25,11 +26,19 @@ const SignUpPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  // User Type State
+  const [userType, setUserType] = useState<'student' | 'teacher'>('student');
+
+  // Student Specific States
   const [grade, setGrade] = useState('1');
   const [classNum, setClassNum] = useState('1');
   const [school, setSchool] = useState('완도초등학교');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
+
+  // Teacher Specific States (currently empty, but ready for future fields)
+  // const [teacherId, setTeacherId] = useState('');
 
   const grades = Array.from({ length: 6 }, (_, i) => String(i + 1));
   const classNums = Array.from({ length: 20 }, (_, i) => String(i + 1));
@@ -59,18 +68,29 @@ const SignUpPage: React.FC = () => {
       const user = userCredential.user;
 
       // Firestore에 추가 정보 저장
-      await setDoc(doc(db, 'users', user.uid), {
+      const userData: any = {
         uid: user.uid,
         email,
         userId,
         name,
-        school,
-        grade: parseInt(grade),
-        class: parseInt(classNum),
-        avatarConfig: {},
-        warnCount: 0,
+        userType,
         createdAt: serverTimestamp(),
-      });
+      };
+
+      if (userType === 'student') {
+        Object.assign(userData, {
+          school,
+          grade: parseInt(grade),
+          class: parseInt(classNum),
+          avatarConfig: {},
+          warnCount: 0,
+        });
+      } else if (userType === 'teacher') {
+        // Add teacher specific data here if needed
+        // Object.assign(userData, { teacherId });
+      }
+
+      await setDoc(doc(db, 'users', user.uid), userData);
 
       // 회원가입 성공 후 로그인 페이지로 이동
       navigate('/');
@@ -134,117 +154,134 @@ const SignUpPage: React.FC = () => {
                 className="mt-1 block w-full px-4 py-3 rounded-lg bg-slate-100 border-0 focus:ring-2 focus:ring-blue-300"
               />
             </div>
-            <div>
-              <Label className="text-slate-700">학교</Label>
-              <Listbox value={school} onChange={setSchool}>
-                <div className="relative mt-1">
-                  <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 py-3 pl-4 pr-10 text-left shadow-sm border-0 focus:ring-2 focus:ring-blue-300">
-                    <span className="block truncate text-slate-700">{school}</span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      ▼
-                    </span>
-                  </Listbox.Button>
-                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {schools.map((s, sIdx) => (
-                      <Listbox.Option
-                        key={sIdx}
-                        className={({ active }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'}`
-                        }
-                        value={s}
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                              {s}
-                            </span>
-                            {selected ? (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                ✓
-                              </span>
-                            ) : null}
-                          </>
-                        )}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </div>
-              </Listbox>
+
+            <div className="col-span-2 border-t border-slate-200 pt-6 mt-6">
+              <h3 className="text-lg font-semibold text-slate-700 mb-4">회원 유형 선택</h3>
+              <Tabs value={userType} onValueChange={(value) => setUserType(value as 'student' | 'teacher')} className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="student">학생</TabsTrigger>
+                  <TabsTrigger value="teacher">교사</TabsTrigger>
+                </TabsList>
+                <TabsContent value="student" className="mt-4 grid grid-cols-2 gap-6">
+                  <div>
+                    <Label className="text-slate-700">학교</Label>
+                    <Listbox value={school} onChange={setSchool}>
+                      <div className="relative mt-1">
+                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 py-3 pl-4 pr-10 text-left shadow-sm border-0 focus:ring-2 focus:ring-blue-300">
+                          <span className="block truncate text-slate-700">{school}</span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            ▼
+                          </span>
+                        </Listbox.Button>
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {schools.map((s, sIdx) => (
+                            <Listbox.Option
+                              key={sIdx}
+                              className={({ active }) =>
+                                `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'}`
+                              }
+                              value={s}
+                            >
+                              {({ selected }) => (
+                                <>
+                                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                    {s}
+                                  </span>
+                                  {selected ? (
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                                      ✓
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </div>
+                    </Listbox>
+                  </div>
+                  <div>
+                    <Label className="text-slate-700">학년</Label>
+                    <Listbox value={grade} onChange={setGrade}>
+                      <div className="relative mt-1">
+                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 py-3 pl-4 pr-10 text-left shadow-sm border-0 focus:ring-2 focus:ring-blue-300">
+                          <span className="block truncate text-slate-700">{grade}</span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            ▼
+                          </span>
+                        </Listbox.Button>
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {grades.map((g, gIdx) => (
+                            <Listbox.Option
+                              key={gIdx}
+                              className={({ active }) =>
+                                `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'}`
+                              }
+                              value={g}
+                            >
+                              {({ selected }) => (
+                                <>
+                                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                    {g}
+                                  </span>
+                                  {selected ? (
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                                      ✓
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </div>
+                    </Listbox>
+                  </div>
+                  <div>
+                    <Label className="text-slate-700">반</Label>
+                    <Listbox value={classNum} onChange={setClassNum}>
+                      <div className="relative mt-1">
+                        <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 py-3 pl-4 pr-10 text-left shadow-sm border-0 focus:ring-2 focus:ring-blue-300">
+                          <span className="block truncate text-slate-700">{classNum}</span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            ▼
+                          </span>
+                        </Listbox.Button>
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {classNums.map((c, cIdx) => (
+                            <Listbox.Option
+                              key={cIdx}
+                              className={({ active }) =>
+                                `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'}`
+                              }
+                              value={c}
+                            >
+                              {({ selected }) => (
+                                <>
+                                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
+                                    {c}
+                                  </span>
+                                  {selected ? (
+                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
+                                      ✓
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </div>
+                    </Listbox>
+                  </div>
+                </TabsContent>
+                <TabsContent value="teacher" className="mt-4">
+                  {/* Teacher specific fields can be added here */}
+                  <p className="text-slate-700">교사 전용 필드를 여기에 추가하세요.</p>
+                </TabsContent>
+              </Tabs>
             </div>
-            <div>
-              <Label className="text-slate-700">학년</Label>
-              <Listbox value={grade} onChange={setGrade}>
-                <div className="relative mt-1">
-                  <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 py-3 pl-4 pr-10 text-left shadow-sm border-0 focus:ring-2 focus:ring-blue-300">
-                    <span className="block truncate text-slate-700">{grade}</span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      ▼
-                    </span>
-                  </Listbox.Button>
-                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {grades.map((g, gIdx) => (
-                      <Listbox.Option
-                        key={gIdx}
-                        className={({ active }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'}`
-                        }
-                        value={g}
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                              {g}
-                            </span>
-                            {selected ? (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                ✓
-                              </span>
-                            ) : null}
-                          </>
-                        )}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </div>
-              </Listbox>
-            </div>
-            <div>
-              <Label className="text-slate-700">반</Label>
-              <Listbox value={classNum} onChange={setClassNum}>
-                <div className="relative mt-1">
-                  <Listbox.Button className="relative w-full cursor-default rounded-lg bg-slate-100 py-3 pl-4 pr-10 text-left shadow-sm border-0 focus:ring-2 focus:ring-blue-300">
-                    <span className="block truncate text-slate-700">{classNum}</span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      ▼
-                    </span>
-                  </Listbox.Button>
-                  <Listbox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                    {classNums.map((c, cIdx) => (
-                      <Listbox.Option
-                        key={cIdx}
-                        className={({ active }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-100 text-blue-900' : 'text-gray-900'}`
-                        }
-                        value={c}
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>
-                              {c}
-                            </span>
-                            {selected ? (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-blue-600">
-                                ✓
-                              </span>
-                            ) : null}
-                          </>
-                        )}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </div>
-              </Listbox>
-            </div>
+
             <div className="col-span-2 mt-4">
               <Button 
                 type="submit" 
